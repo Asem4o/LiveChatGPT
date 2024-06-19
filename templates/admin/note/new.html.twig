@@ -1,0 +1,12 @@
+{% extends 'bar.html.twig' %}
+
+{% block body %}
+    <h1>Create new Note for {{ note.user.username }}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">Save</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('admin_user_notes', {'id': note.user.id}) }}">Back to notes</a>
+{% endblock %}

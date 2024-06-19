@@ -1,0 +1,50 @@
+{% extends 'bar.html.twig' %}
+
+{% block title %}test{% endblock %}
+
+{% block body %}
+    {% if error_message is defined %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+    {% endif %}
+    <style>
+        .notification-highlight {
+            color: red;
+        }
+    </style>
+    <div class="mb-3">
+        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+    </div>
+
+    <div class="mb-4">
+        <a href="{{ path('note') }}" class="btn btn-primary">Create New Note</a>
+    </div>
+  
+    <h1>My Notes</h1>
+
+    {% if user.profilePicturePath %}
+        <img src="{{ asset('upload/profile_pictures/' ~ user.profilePicturePath) }}" alt="Profile Picture" width="200" height="200  ">
+    {% endif %}
+    <ul>
+        {% for note in notes %}
+            <li>{{ note.content }} - {{ note.created|date('Y-m-d H:i:s') }}</li>
+        {% endfor %}
+    </ul>
+    {% if app.user %}
+        {% set notifications = app.user.getNotifications|filter(notification => notification.isRead == false) %}
+        {% if notifications is not empty %}
+            <div class="notifications">
+                <h2>Notifications</h2>
+                <ul>
+                    {% for notification in notifications %}
+                        <li class="notification-highlight">{{ notification.message|raw }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <a href="{{ path('notifications_mark_as_read') }}">Mark all as read</a>
+        {% endif %}
+    {% endif %}
+
+
+{% endblock %}

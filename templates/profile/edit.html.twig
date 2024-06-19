@@ -1,0 +1,36 @@
+{% extends 'bar.html.twig' %}
+{% block body %}
+{{ form_start(form) }}
+
+    {# Render the old password field with potential error messages #}
+<div>
+    {{ form_label(form.oldPassword, 'Current Password') }}
+    {{ form_widget(form.oldPassword) }}
+    {{ form_errors(form.oldPassword) }}
+</div>
+
+{# Render the new password field #}
+<div>
+    {{ form_label(form.newPassword, 'New Password') }}
+    {{ form_widget(form.newPassword) }}
+    {{ form_errors(form.newPassword) }}
+</div>
+
+{# Render the confirm password field #}
+<div>
+    {{ form_label(form.confirmPassword, 'Confirm New Password') }}
+    {{ form_widget(form.confirmPassword) }}
+    {{ form_errors(form.confirmPassword) }}
+</div>
+
+{# Render the profile picture upload field #}
+<div>
+    {{ form_label(form.profilePicture, 'Profile Picture') }}
+    {{ form_widget(form.profilePicture) }}
+    {{ form_errors(form.profilePicture) }}
+</div>
+ <a href="{{ path('profile') }}"> to profile</a><br>
+<button type="submit">Save changes</button>
+
+{{ form_end(form) }}
+{% endblock %}

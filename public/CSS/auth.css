@@ -1,0 +1,62 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: aqua; /* Light grey background, adjust as needed */
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: cadetblue; /* White background for the login box */
+    border-radius: 8px; /* Optional: rounded corners for the box */
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-block {
+    width: 100%; /* Makes the button expand to the full width of the form */
+}
+
+/* Container for the form to center it on the page */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Styling the registration box */
+.registration-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    margin: auto;
+    background: cadetblue;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Additional styling for the form inside the box */
+.form-horizontal {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style adjustments for the button */
+.btn-block {
+    width: 100%; /* Full width */
+}

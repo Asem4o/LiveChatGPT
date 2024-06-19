@@ -1,0 +1,36 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat App</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const socket = io(); // Connect to the server
+
+            socket.on('connect', () => {
+                console.log('Connected to the server.');
+            });
+
+            socket.on('chat message', (msg) => {
+                const messages = document.getElementById('messages');
+                const messageItem = document.createElement('li');
+                messageItem.textContent = msg;
+                messages.appendChild(messageItem);
+            });
+
+            document.getElementById('sendButton').onclick = function() {
+                const messageInput = document.getElementById('messageInput');
+                socket.emit('chat message', messageInput.value); // Send message to server
+                messageInput.value = ''; // Clear input
+            };
+        });
+    </script>
+</head>
+<body>
+<ul id="messages"></ul>
+<input id="messageInput" type="text" autocomplete="off">
+<button id="sendButton">Send</button>
+</body>
+</html>

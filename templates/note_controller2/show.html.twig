@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Note{% endblock %}
+
+{% block body %}
+    <h1>Note</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ note.id }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ note.content }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ note.created ? note.created|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_note_controller2_index') }}">back to list</a>
+
+    <a href="{{ path('app_note_controller2_edit', {'id': note.id}) }}">edit</a>
+
+    {{ include('note_controller2/_delete_form.html.twig') }}
+{% endblock %}

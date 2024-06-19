@@ -1,0 +1,92 @@
+{% extends 'bar.html.twig' %}
+
+{% block body %}
+    <h1>Chat with {{ targetUsername }}</h1>
+    <div>
+        <h2>Messages:</h2>
+        <ul id="messages"></ul>
+        <input id="messageInput" type="text" placeholder="Type your message here" autocomplete="off">
+        <button id="sendButton">Send</button>
+    </div>
+    <!-- Include Socket.io from a CDN -->
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const serverUrl = window.location.hostname === '77.85.205.5'
+                ? 'http://77.85.205.5:3001'
+                : 'http://192.168.1.10:3001'; // Replace with your server's local IP
+
+            const socket = io(serverUrl);
+
+            const currentUsername = "{{ currentUsername }}";
+            const currentUserId = "{{ currentUserId }}";
+            const targetUserId = "{{ targetUserId }}";
+            const currentUserProfilePicture = "{{ currentUserProfilePicture ? asset('upload/profile_pictures/' ~ currentUserProfilePicture) : asset('upload/profile_pictures/default.png') }}";
+            const targetUserProfilePicture = "{{ targetUserProfilePicture ? asset('upload/profile_pictures/' ~ targetUserProfilePicture) : asset('upload/profile_pictures/default.png') }}";
+            const room = `room_${Math.min(currentUserId, targetUserId)}_${Math.max(currentUserId, targetUserId)}`;
+            socket.emit('join private chat', { room, username: currentUsername, profilePicturePath: currentUserProfilePicture });
+
+            socket.on('chat history', function(messages) {
+                const messagesList = document.getElementById('messages');
+                messagesList.innerHTML = ''; // Clear existing messages
+                messages.forEach(({ user, message, timestamp, profilePicture }) => {
+                    const messageElement = document.createElement('li');
+                    const date = new Date(timestamp);
+                    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+                    const profileImgElement = document.createElement('img');
+                    profileImgElement.src = user === currentUsername ? currentUserProfilePicture : targetUserProfilePicture;
+                    profileImgElement.alt = 'Profile Picture';
+                    profileImgElement.width = 40; // Adjust size as needed
+                    profileImgElement.height = 40; // Adjust size as needed
+                    profileImgElement.style.borderRadius = '50%'; // Make it a circle
+                    profileImgElement.style.marginRight = '10px'; // Spacing
+
+                    const textElement = document.createElement('span');
+                    textElement.textContent = `${timeString} - ${user}: ${message}`;
+
+                    messageElement.appendChild(profileImgElement);
+                    messageElement.appendChild(textElement);
+
+                    messagesList.appendChild(messageElement);
+                });
+            });
+
+            socket.on('chat message', function({ user, message, timestamp, profilePicture }) {
+                const messagesList = document.getElementById('messages');
+                const messageElement = document.createElement('li');
+                const date = new Date(timestamp);
+                const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+                const profileImgElement = document.createElement('img');
+                profileImgElement.src = user === currentUsername ? currentUserProfilePicture : targetUserProfilePicture;
+                profileImgElement.alt = 'Profile Picture';
+                profileImgElement.width = 40; // Adjust size as needed
+                profileImgElement.height = 40; // Adjust size as needed
+                profileImgElement.style.borderRadius = '50%'; // Make it a circle
+                profileImgElement.style.marginRight = '10px'; // Spacing
+
+                const textElement = document.createElement('span');
+                textElement.textContent = `${timeString} - ${user}: ${message}`;
+
+                messageElement.appendChild(profileImgElement);
+                messageElement.appendChild(textElement);
+
+                messagesList.appendChild(messageElement);
+            });
+
+            const sendButton = document.getElementById('sendButton');
+            const messageInput = document.getElementById('messageInput');
+
+            sendButton.onclick = function() {
+                const message = messageInput.value.trim();
+                const timestamp = Date.now(); // current timestamp
+                if (message) {
+                    socket.emit('private message', { room, message, username: currentUsername, timestamp, profilePicturePath: currentUserProfilePicture });
+                    messageInput.value = '';
+                }
+            };
+        });
+
+    </script>
+{% endblock %}

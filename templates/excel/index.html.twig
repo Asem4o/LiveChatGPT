@@ -1,0 +1,32 @@
+{# templates/default/index.html.twig #}
+{% extends 'bar.html.twig' %}
+{% block title %}Сан Стефано 70{% endblock %}
+
+
+{% block body %}
+
+    <div class="table-responsive">
+        <h1 class="mb-4 text-center">Сан Стефано 70 за месец 05.2024</h1>
+        <table class="table table-bordered table-striped">
+            <tbody>
+            {% set total_rows = data|length %}
+            {% for index, row in data %}
+                {% if index > 0 %}
+                    <tr class="{% if index is odd %}table-light{% else %}table-dark{% endif %}">
+                        {% for key, cell in row %}
+                            {% if cell is not null %}
+                                <td class="fw-bold">{{ cell }}</td>
+                            {% else %}
+                                <td></td> {# Empty cell for null values #}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
+
